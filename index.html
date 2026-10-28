@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eaf7ff">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>小哆啦</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="compact">
+  <main class="app-shell">
+    <header class="titlebar">
+      <div class="brand"><span class="brand-mark">哆</span><span>小哆啦 <small>学习小助手</small></span></div>
+      <div class="window-actions">
+        <button class="icon-button home-button" id="home-button" title="返回主页" aria-label="返回主页" hidden>⌂ <span>主页</span></button>
+        <button class="icon-button" id="settings-open" title="设置" aria-label="设置">⚙</button>
+        <button class="icon-button" id="collapse-window" title="收起到桌宠" aria-label="收起到桌宠">⌄</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow" id="date-label">今天也一起加油</p>
+        <h1 id="greeting">嗨，我是小哆啦！</h1>
+        <p class="hero-subtitle">你的桌面学习搭子，随叫随到。</p>
+      </div>
+      <div class="mascot-button" id="mascot" title="点击播放语音，按住拖动" role="button" tabindex="0" aria-label="点击哆啦A梦播放语音，按住拖动">
+        <span class="mascot" role="img" aria-label="哆啦A梦桌宠">
+          <img class="mascot-image mascot-rest-image" src="assets/mascot-rest.png" alt="">
+          <img id="pet-action-image" class="mascot-image pet-action-image" src="assets/pet-actions/rain-transparent.png" alt="">
+        </span>
+      </div>
+      <button class="pet-menu-button" id="pet-menu-button" title="打开功能菜单" aria-label="打开桌宠功能菜单">☰ <span>功能</span></button>
+      <div class="speech-bubble" id="speech-bubble">点点我，看看今天能帮你做什么！</div>
+    </section>
+
+    <section class="launcher-menu" id="launcher-menu" aria-label="桌宠快捷功能">
+      <div class="launcher-heading"><span>功能</span><button class="icon-button" id="menu-collapse" title="返回桌宠" aria-label="返回桌宠">×</button></div>
+      <div class="launcher-grid">
+        <button class="launcher-action" data-launch="home"><span class="launcher-icon chat-icon">☁</span><b>聊天问答</b></button>
+        <button class="launcher-action" data-launch="files"><span class="launcher-icon file-icon">▤</span><b>整理文件</b></button>
+        <button class="launcher-action" data-launch="study"><span class="launcher-icon study-icon">✎</span><b>学习解题</b></button>
+        <button class="launcher-action" data-launch="notes"><span class="launcher-icon note-icon">▧</span><b>备忘计划</b></button>
+        <button class="launcher-action" data-launch="play"><span class="launcher-icon play-icon">✦</span><b>玩个游戏</b></button>      </div>
+      <div class="launcher-footer"><button class="text-button" id="launcher-settings">互动音频</button></div>
+    </section>
+
+    <nav class="tabs" aria-label="功能导航">
+      <button class="tab active" data-page="home"><span>⌂</span>首页</button>
+      <button class="tab" data-page="files"><span>▤</span>收纳</button>
+      <button class="tab" data-page="study"><span>✎</span>学习</button>
+      <button class="tab" data-page="notes"><span>▧</span>备忘</button>
+      <button class="tab" data-page="play"><span>✦</span>玩耍</button>
+      <button class="tab" data-page="reach"><span>⌕</span>联网</button>
+    </nav>
+
+    <div class="page-scroll">
+      <section class="page active" id="page-home">
+        <div class="section-heading"><div><p class="eyebrow">YOUR LITTLE HELPER</p><h2>今天的安排</h2></div><div class="clock" id="clock">--:--</div></div>
+        <div class="summary-grid">
+          <article class="summary-card"><span class="summary-icon blue">◷</span><div><strong id="task-count">0</strong><small>待办事项</small></div></article>
+          <article class="summary-card"><span class="summary-icon yellow">▦</span><div><strong id="course-count">0</strong><small>课表课程</small></div></article>
+          <article class="summary-card"><span class="summary-icon pink">♡</span><div><strong id="note-count">0</strong><small>条备忘</small></div></article>
+        </div>
+        <div class="quick-actions">
+          <button class="action-card" data-go="study"><span class="action-icon">✦</span><span><b>疑难解答</b><small>拍脑袋不如问 AI</small></span><i>›</i></button>          <button class="action-card" data-go="files"><span class="action-icon mint">▤</span><span><b>整理文件</b><small>按类型归入文件夹</small></span><i>›</i></button>
+          <button class="action-card" data-go="notes"><span class="action-icon lavender">✎</span><span><b>记一条备忘</b><small>灵感和待办都收好</small></span><i>›</i></button>
+        </div>        <article class="chat-card">
+          <div class="card-title"><div><span class="online-dot"></span><b>和小哆啦聊聊</b></div><span class="subtle">指令 / 问答</span></div>
+          <div class="chat-log" id="chat-log"><p class="chat-line bot-line">你好呀！可以问我问题、说“联网搜索 关键词”查资料，或发送网页链接让我读取。</p></div>
+          <form id="chat-form" class="chat-form"><input id="chat-input" placeholder="输入消息，按 Enter 发送…" maxlength="1200" autocomplete="off"><button type="submit" aria-label="发送">➤</button></form>
+        </article>
+        <div class="footer-note">轻轻点击小哆啦，有惊喜哦 <span>✧</span></div>
+      </section>
+
+      <section class="page" id="page-reach">
+        <div class="section-heading"><div><p class="eyebrow">AGENT REACH</p><h2>联网查找</h2></div><span class="heading-emoji">⌕</span></div>
+        <p class="page-intro">搜索已安装的平台，或粘贴网址读取内容。此功能只搜索和读取，不会发帖、评论或私信。</p>
+        <form id="reach-form" class="reach-form">
+          <label for="reach-channel">搜索平台</label>
+          <select id="reach-channel" aria-label="搜索平台"></select>
+          <div class="form-row">
+            <input id="reach-query" placeholder="输入关键词，或粘贴网页链接…" maxlength="1200" autocomplete="off" required>
+            <button class="primary-button" type="submit">查找</button>
+          </div>
+        </form>
+        <p class="helper-text" id="reach-hint">贴入网页链接时会自动读取；部分平台可能需要添加渠道或由你本人登录。</p>
+        <div class="reach-results" id="reach-results" aria-live="polite">
+          <p class="empty-state">输入关键词或粘贴网址，开始联网查找。</p>
+        </div>
+      </section>
+
+      <section class="page" id="page-files">
+        <div class="section-heading"><div><p class="eyebrow">A TIDY DESK, A CLEAR MIND</p><h2>文件收纳</h2></div><span class="heading-emoji">▤</span></div>
+        <p class="page-intro">选择一个文件夹，先预览分类，再确认整理。只处理当前文件夹中的文件，不扫描子文件夹。</p>
+        <button class="primary-button wide" id="choose-folder">选择文件夹</button>
+        <div class="folder-path" id="folder-path">还没有选择文件夹</div>
+        <div class="organize-preview" id="organize-preview"><p class="empty-state">选好文件夹后，这里会显示分类预览。</p></div>
+        <button class="primary-button wide" id="organize-button" disabled>确认整理文件</button>
+        <p class="helper-text">同名文件会自动保留并添加序号，不会覆盖已有内容。</p>
+      </section>
+
+      <section class="page" id="page-study">
+        <div class="section-heading"><div><p class="eyebrow">PLAN, FOCUS, GROW</p><h2>学习计划</h2></div><span class="heading-emoji">✎</span></div>
+        <article class="panel-card">
+          <div class="card-title"><b>添加一个提醒</b><span class="subtle">到点通知</span></div>
+          <form id="task-form" class="stack-form">
+            <input id="task-title" placeholder="例如：复习英语单词" maxlength="100" required>
+            <div class="form-row"><input id="task-due" type="datetime-local" required><button class="primary-button" type="submit">添加</button></div>
+          </form>
+        </article>
+        <div class="list-heading"><h3>待办计划</h3><span id="task-list-count" class="pill">0</span></div>
+        <div id="task-list" class="item-list"><p class="empty-state">还没有计划，添加一件小事开始吧。</p></div>
+        <article class="panel-card timetable-card">
+          <div class="card-title"><b>我的课表</b><button class="text-button" id="import-timetable">导入 CSV / JSON</button></div>
+          <p class="helper-text">CSV 列：课程名, 星期(1-7), 时间(HH:mm), 地点（可选）；JSON 可用课程对象数组。</p>
+          <input type="file" id="timetable-file" accept=".csv,.json,application/json,text/csv" hidden>
+          <div id="course-list" class="course-list"><p class="empty-state">导入课表后，可提前 10 分钟收到提醒。</p></div>
+        </article>
+        <article class="solve-card">
+          <div class="card-title"><b>一键解答疑难</b><span>✦</span></div>
+          <textarea id="question-input" rows="3" placeholder="把题目或不懂的问题写在这里…"></textarea>
+          <button class="primary-button wide" id="solve-button">请小哆啦帮我解答</button>
+          <div class="answer-box" id="answer-box" hidden></div>
+          <button class="text-button feedback-link" id="feedback-open">生成反馈 / 联系</button>
+        </article>
+      </section>
+
+      <section class="page" id="page-notes">
+        <div class="section-heading"><div><p class="eyebrow">SAVE IT FOR LATER</p><h2>备忘小本本</h2></div><span class="heading-emoji">▧</span></div>
+        <form id="note-form" class="note-composer">
+          <input id="note-title" placeholder="给这条备忘起个标题" maxlength="80" required>
+          <textarea id="note-content" rows="4" placeholder="写下灵感、清单或重要提醒…" maxlength="3000"></textarea>
+          <button class="primary-button" type="submit">收进小本本</button>
+        </form>
+        <div class="list-heading"><h3>最近记录</h3><span id="note-list-count" class="pill">0</span></div>
+        <div id="note-list" class="item-list"><p class="empty-state">还没有备忘，随时可以记下来。</p></div>
+      </section>
+
+      <section class="page" id="page-play">
+        <div class="section-heading"><div><p class="eyebrow">TAKE A TINY BREAK</p><h2>休息一下</h2></div><span class="heading-emoji">✦</span></div>
+        <article class="game-card">
+          <div class="game-top"><div><p class="eyebrow">点击泡泡小游戏</p><h3>接住星星泡泡</h3></div><div class="score-box"><span id="game-time">20</span><small>秒</small><b id="game-score">0 分</b></div></div>
+          <p class="page-intro">20 秒内，点中飘出来的泡泡！</p>
+          <div class="game-arena" id="game-arena"><div class="game-start" id="game-start">点这里开始 ✨</div></div>
+          <button class="secondary-button wide" id="game-restart">开始游戏</button>
+        </article>
+        <article class="panel-card"><div class="card-title"><b>小哆啦的语音</b><span class="subtle">使用本机中文语音</span></div><p class="page-intro">选择系统已安装的中文语音。点击下方按钮可开启或关闭日常语音。</p><label class="voice-label" for="speech-voice">语音</label><select id="speech-voice" aria-label="选择播报语音"></select><div class="voice-actions"><button class="secondary-button" id="speech-toggle">开启语音播报</button><button class="secondary-button" id="speech-test">试听</button></div><p class="helper-text">语音由 Windows / Electron 提供，不是哆啦A梦原声；安装更多中文语音可在 Windows 语音设置中选择。</p></article>
+      </section>
+    </div>
+
+    <div class="pet-context-menu" id="pet-context-menu" hidden aria-label="桌宠菜单"><button id="context-audio">导入音频</button><button id="context-remove-audio">移除音频</button><button id="context-functions">功能</button><button id="context-hide">隐藏桌宠</button></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <div class="modal-backdrop" id="settings-modal" hidden>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-heading"><div><p class="eyebrow">PERSONALIZE YOUR HELPER</p><h2 id="settings-title">互动音频</h2></div><button class="icon-button modal-close" data-close="settings-modal" aria-label="关闭">×</button></div>
+      <p class="page-intro">登录中央服务后，所有用户共用管理员配置的模型。模型密钥只保存在服务器上。</p>
+      <form id="account-form" class="stack-form">
+        <label>中央服务 HTTPS 地址<input id="setting-server-url" type="url" placeholder="https://your-service.example.com" required></label>
+        <label>邮箱<input id="account-email" type="email" autocomplete="username" required></label>
+        <label>密码<input id="account-password" type="password" autocomplete="current-password" minlength="12" maxlength="128" required></label>
+        <label id="invite-code-label" hidden>邀请码<input id="account-invite" autocomplete="one-time-code"></label>
+        <div class="account-actions"><button class="primary-button" id="account-login" type="button">登录</button><button class="secondary-button" id="account-register" type="button">邀请码注册</button><button class="secondary-button" id="account-logout" type="button" hidden>退出登录</button></div>
+      </form>
+      <p class="helper-text" id="account-status">未登录。普通账号需要管理员提供的一次性邀请码。</p>
+      <section id="admin-settings" hidden>
+        <h3 class="settings-section-title">共享模型（管理员）</h3>
+        <form id="settings-form" class="stack-form">
+          <label>智谱兼容接口地址<input id="setting-api-url" type="url" placeholder="https://open.bigmodel.cn/api/paas/v4/chat/completions" required></label>
+          <label>共享模型名称<input id="setting-model" required></label>          <button class="primary-button wide" type="submit">保存全员共享设置</button>
+        </form>
+        <div class="invite-actions"><button class="secondary-button wide" id="create-invite" type="button">生成一次性邀请码</button><output id="invite-result" hidden></output></div>
+      </section>
+      <section class="interaction-settings">
+        <h3 class="settings-section-title">导入音频</h3>
+        <label>铃铛互动时显示的话<input id="interaction-phrase" maxlength="180" value="嗨！碰到我啦，今天也一起加油吧！"></label>
+        <div class="audio-import-row"><span id="interaction-audio-status">尚未导入声音</span><button class="secondary-button" id="import-interaction-audio" type="button">导入 WAV / MP3</button><button class="secondary-button" id="remove-interaction-audio" type="button" hidden>移除</button></div>
+        <p class="helper-text">导入你有权使用的录音；点击角色时优先播放导入声音。文件保存在这台电脑，不会上传到中央服务器。</p>
+      </section>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="feedback-modal" hidden>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="feedback-title">
+      <div class="modal-heading"><div><p class="eyebrow">HELP US IMPROVE</p><h2 id="feedback-title">反馈与联系</h2></div><button class="icon-button modal-close" data-close="feedback-modal" aria-label="关闭">×</button></div>
+      <p class="page-intro">描述遇到的问题或想要的功能，我们会帮你整理成反馈邮件草稿。</p>
+      <textarea id="feedback-content" rows="6" placeholder="写下你的问题、建议或当前题目…" maxlength="3000"></textarea>
+      <div class="modal-actions"><button class="secondary-button" id="copy-feedback">复制反馈</button><button class="primary-button" id="send-feedback">打开邮件草稿</button></div>
+    </section>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
